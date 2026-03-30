@@ -1,7 +1,3 @@
-'use client'
-
-import { useState } from 'react'
-
 interface ExperienceItem {
   years: string
   role: string
@@ -55,42 +51,28 @@ const experiences: CompanyExperience[] = [
 ]
 
 export default function Experience() {
-  const [expandedCompany, setExpandedCompany] = useState<string | null>(null)
-
-  const toggleCompany = (company: string) => {
-    setExpandedCompany(expandedCompany === company ? null : company)
-  }
-
   return (
     <section className="space-y-8">
       <h2 className="text-2xl font-medium">experience</h2>
-      <div className="space-y-4">
-        {experiences.map((company) => (
-          <div key={company.company} className="space-y-2">
-            <button
-              onClick={() => toggleCompany(company.company)}
-              className="text-lg hover:underline underline-offset-4 text-left"
+      <div className="space-y-3">
+        {experiences.flatMap((company) =>
+          company.roles.map((role) => (
+            <div
+              key={`${company.company}-${role.role}-${role.years}`}
+              className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-6"
             >
-              <span className="text-foreground">{company.company}</span>{' '}
-              <span className="text-muted-foreground">software engineer</span>
-            </button>
-
-            {expandedCompany === company.company && (
-              <div className="space-y-3 pl-4 border-l-2 border-muted">
-                {company.roles.map((role, index) => (
-                  <div key={index} className="space-y-1">
-                    <div className="flex justify-between items-baseline">
-                      <span className="text-lg">{role.role}</span>
-                      <span className="text-sm text-muted-foreground">
-                        {role.years}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+              <p className="text-lg">
+                <span className="font-medium text-foreground">
+                  {company.company}
+                </span>
+                <span className="text-muted-foreground">, {role.role}</span>
+              </p>
+              <span className="text-sm text-muted-foreground">
+                {role.years}
+              </span>
+            </div>
+          ))
+        )}
       </div>
     </section>
   )
